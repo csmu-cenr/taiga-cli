@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Taiga CLI</title>
+  <style>
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    svg {
+      height: auto;
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      border: none;
+      border-top: 1px solid #1a1a1a;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+    /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { color: #008000; } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { color: #008000; font-weight: bold; } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+</head>
+<body>
+<p align="center">
+  <img src="assets/hero.png" alt="Taiga CLI — an independent command-line client for Taiga" width="100%">
+</p>
+
+<h1 align="center">Taiga CLI</h1>
+
+<p align="center">
+  <strong>An independent command-line client for Taiga.</strong><br>
+  Readable terminal output for people, and a stable JSON contract for shells, CI, and agents.
+</p>
+
+<p align="center">
+  <a href="https://github.com/KoukeNeko/taiga-cli/releases/latest"><img alt="Latest release" src="https://img.shields.io/github/v/release/KoukeNeko/taiga-cli?style=for-the-badge&logo=github&label=RELEASE&color=2196F3"></a>
+  <a href="https://github.com/KoukeNeko/taiga-cli/releases"><img alt="Release downloads" src="https://img.shields.io/github/downloads/KoukeNeko/taiga-cli/total?style=for-the-badge&logo=github&label=DOWNLOADS&color=4CAF50"></a>
+  <a href="https://github.com/KoukeNeko/taiga-cli/actions/workflows/ci.yml"><img alt="CI status" src="https://img.shields.io/github/actions/workflow/status/KoukeNeko/taiga-cli/ci.yml?branch=main&style=for-the-badge&logo=githubactions&logoColor=white&label=CI"></a>
+  <a href="COMPATIBILITY.md"><img alt="Verified against Taiga 6.10.2" src="https://img.shields.io/badge/TAIGA-6.10.2_VERIFIED-00A5A5?style=for-the-badge"></a>
+  <a href="LICENSE"><img alt="MIT licence" src="https://img.shields.io/badge/LICENSE-MIT-4CAF50?style=for-the-badge&logo=github"></a>
+</p>
+
+<p align="center">
+  <strong>English</strong> · <a href="README.zh-TW.md">繁體中文</a>
+</p>
+
+<p align="center">
+  <a href="INSTALL.md">Install</a>
+  · <a href="#getting-started">Getting started</a>
+  · <a href="https://github.com/KoukeNeko/taiga-cli/wiki">Handbook</a>
+  · <a href="CHANGELOG.md">Changelog</a>
+  · <a href="COMPATIBILITY.md">Compatibility</a>
+  · <a href="PRIVACY.md">Privacy</a>
+</p>
+
+<div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">taiga</span> issue list</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">taiga</span> issue create <span class="at">--subject</span> <span class="st">&quot;Fix token refresh&quot;</span> <span class="at">--type</span> Bug</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="ex">taiga</span> issue close 42 <span class="at">--status</span> Closed</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co"># The same data, for a script, a CI job, or an agent</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="ex">taiga</span> issue view 42 <span class="at">--json</span> <span class="at">--fields</span> ref,subject,status,version</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode json"><code class="sourceCode json"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span><span class="dt">&quot;data&quot;</span><span class="fu">:{</span><span class="dt">&quot;ref&quot;</span><span class="fu">:</span><span class="dv">42</span><span class="fu">,</span><span class="dt">&quot;status&quot;</span><span class="fu">:</span><span class="st">&quot;Closed&quot;</span><span class="fu">,</span><span class="dt">&quot;subject&quot;</span><span class="fu">:</span><span class="st">&quot;Fix token refresh&quot;</span><span class="fu">,</span><span class="dt">&quot;version&quot;</span><span class="fu">:</span><span class="dv">8</span><span class="fu">},</span><span class="dt">&quot;meta&quot;</span><span class="fu">:{</span><span class="dt">&quot;contract&quot;</span><span class="fu">:</span><span class="dv">1</span><span class="fu">}}</span></span></code></pre></div>
+<p>An independent command-line client for <a
+href="https://taiga.io/">Taiga 6</a>, not affiliated with the Taiga
+project. It drives projects, agile workflows, and wikis without leaving
+the terminal, discovers the API from the frontend's
+<code>conf.json</code>, including sites deployed under a
+<code>/taiga/</code> subpath, and hands the token to your operating
+system keyring (on Linux, a file only you can read) instead of writing
+it into a config file.</p>
+<p><strong>One command serves both people and programs.</strong> Run it
+directly and you get aligned tables; add <code>--json</code> and you get
+a versioned contract, backed by fixed exit codes and JSON Schema
+descriptors, so a shell script, a CI job, or an LLM agent can drive it
+safely. The output format never changes just because it was piped — if
+you want JSON, you ask for it.</p>
+<p><strong>Writes behave predictably.</strong> Work items carry a
+version, and Taiga checks it per field: a change to a field someone else
+has already changed is refused instead of overwriting them, while their
+edit to a different field merges. Nothing is ever auto-merged on your
+behalf — a refusal stops the command so you can re-read and decide. Only
+idempotent GETs are retried. If a connection drops mid-write, the CLI
+reports <code>ambiguous_commit</code> and asks you to verify rather than
+blindly resending.</p>
+<h2 id="what-it-does">What it does</h2>
+<h3 id="the-whole-taiga-workflow">The whole Taiga workflow</h3>
+<p>Day-to-day operations for projects, epics, user stories, tasks,
+issues, sprints, and wiki pages are all here: list, view, create, edit,
+assign, comment, close, delete. Plus members and role permissions,
+webhooks, custom fields, eight families of workflow metadata, swimlanes,
+tags, due-date presets, and cross-project epic ↔︎ story links.</p>
+<p>Work items accept a bare ref, a <code>project#ref</code> pair, or a
+pasted Taiga URL — all three work:</p>
+<pre class="text"><code>42
+example-project#42
+https://taiga.example.com/taiga/project/example-project/issue/42</code></pre>
+<h3 id="a-stable-surface-for-automation">A stable surface for
+automation</h3>
+<p><code>--json</code> emits a <code>meta.contract</code> version,
+<code>--fields</code> selects columns, and
+<code>taiga schema &lt;command&gt;</code> returns that command's input
+and output JSON Schema along with <code>safety</code> and
+<code>idempotency</code> annotations — enough for an agent to decide
+whether a command may run unattended. Exit codes are partitioned by
+failure kind, and <code>--dry-run</code> resolves and displays the
+mutation it would send while guaranteeing that no write request leaves
+the process.</p>
+<pre class="text"><code>$ taiga schema issue create
+{&quot;data&quot;:{&quot;command&quot;:&quot;issue create&quot;,&quot;safety&quot;:&quot;write&quot;,&quot;idempotency&quot;:&quot;non_idempotent&quot;,
+         &quot;input_schema&quot;:{...,&quot;required&quot;:[&quot;subject&quot;]},&quot;output_schema&quot;:{...}},&quot;meta&quot;:{&quot;contract&quot;:1}}</code></pre>
+<p>An agent reads <code>safety</code> and <code>idempotency</code> to
+decide whether a command may run unattended, and the schemas to build
+and validate the call — nothing is scraped from <code>--help</code>.</p>
+<h3 id="hard-to-break-things-with">Hard to break things with</h3>
+<p>Deleting work items and metadata is verified by reading the target
+back. Attachment and CSV downloads stream to a <code>0600</code>
+temporary file, verify their digests, and land atomically without
+clobbering an existing file. Destructive actions require an explicit
+<code>--yes</code> when there is no terminal. Webhook secrets,
+application-token auth codes, and ownership-transfer tokens never appear
+in any output, including dry runs.</p>
+<h3 id="safe-to-automate">Safe to automate</h3>
+<p>A wrapper that misreports what happened to your data is worse than no
+wrapper, because a script acts on the answer. Three things follow from
+that:</p>
+<ul>
+<li><strong>A refused write is told apart from a bad one by structure,
+not wording.</strong> Taiga answers both with HTTP 400 under the same
+key and separates them only by the shape of the value, and it translates
+the sentence, so matching on the words would misfire and would fail
+outright on a server running in another language.</li>
+<li><strong>A write whose outcome is unknown says so.</strong>
+Interrupting a request already in flight does not un-send it, so the CLI
+reports <code>ambiguous_commit</code> and asks you to check rather than
+claiming a failure it cannot prove.</li>
+<li><strong>Concurrent writes are exercised, not assumed.</strong> An
+end-to-end test drives one project from twelve accounts at once and
+checks that no two accepted writes ever saw the same resulting
+version.</li>
+</ul>
+<p><a
+href="https://github.com/KoukeNeko/taiga-cli/wiki/Work-Items">Concurrency
+and conflicts</a> covers what Taiga refuses and what it merges.</p>
+<h3 id="many-sites-many-projects">Many sites, many projects</h3>
+<p>Profiles switch between Taiga sites, each remembering its own API URL
+and default project. You can also pin a profile and project to a single
+Git repository, stored in <code>.git/config</code> so it is never
+committed:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">taiga</span> project use example-project <span class="at">--local</span></span></code></pre></div>
+<h3 id="diagnosable-when-something-breaks">Diagnosable when something
+breaks</h3>
+<p><code>taiga doctor</code> checks frontend discovery, the API,
+authentication, and the default project one by one. When you need help,
+<code>taiga doctor bundle</code> produces a report you can share without
+worrying: version information, presence booleans, and status codes only
+— no URLs, usernames, project names, or credentials — created locally
+and never uploaded.</p>
+<h3 id="how-it-compares">How it compares</h3>
+<p>One binary that a person, a shell script, a CI job, and an agent can
+all share — the lowest common interface, without running another
+service.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th style="text-align: center;">Web UI</th>
+<th style="text-align: center;">Basic CLI</th>
+<th style="text-align: center;">Taiga CLI</th>
+<th style="text-align: center;">MCP server</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A person at a terminal</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">—</td>
+</tr>
+<tr>
+<td>Shell scripts</td>
+<td style="text-align: center;">—</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">—</td>
+</tr>
+<tr>
+<td>CI pipelines</td>
+<td style="text-align: center;">—</td>
+<td style="text-align: center;">⚠️</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">⚠️</td>
+</tr>
+<tr>
+<td>AI agents</td>
+<td style="text-align: center;">—</td>
+<td style="text-align: center;">⚠️</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+</tr>
+<tr>
+<td>Stable JSON contract</td>
+<td style="text-align: center;">—</td>
+<td style="text-align: center;">⚠️</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+</tr>
+<tr>
+<td>JSON Schema per command</td>
+<td style="text-align: center;">—</td>
+<td style="text-align: center;">—</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">varies</td>
+</tr>
+<tr>
+<td>Dry-run</td>
+<td style="text-align: center;">—</td>
+<td style="text-align: center;">⚠️</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">varies</td>
+</tr>
+<tr>
+<td>Conflict-safe writes</td>
+<td style="text-align: center;">n/a</td>
+<td style="text-align: center;">varies</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">varies</td>
+</tr>
+<tr>
+<td>No extra daemon</td>
+<td style="text-align: center;">—</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">✅</td>
+<td style="text-align: center;">—</td>
+</tr>
+</tbody>
+</table>
+<h2 id="getting-started">Getting started</h2>
+<ol type="1">
+<li><p><strong>Install.</strong> Homebrew, on macOS and Linux:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">brew</span> install koukeneko/tap/taiga</span></code></pre></div>
+<p><a href="https://scoop.sh">Scoop</a>, on Windows:</p>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode powershell"><code class="sourceCode powershell"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>scoop bucket add koukeneko https<span class="op">://</span>github<span class="op">.</span><span class="fu">com</span><span class="op">/</span>KoukeNeko<span class="op">/</span>scoop-bucket</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>scoop install koukeneko<span class="op">/</span>taiga-cli</span></code></pre></div>
+<p>On Debian/Ubuntu or Fedora/RHEL, add the signed APT/DNF repository
+for auto-updating installs, or grab a <code>.deb</code> /
+<code>.rpm</code> directly — see <a
+href="INSTALL.md#linux-packages-deb-and-rpm">INSTALL.md</a>.</p>
+<p>Or the install script, which verifies the download against the
+release checksums before it installs anything:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-fsSL</span> https://raw.githubusercontent.com/KoukeNeko/taiga-cli/main/scripts/install.sh <span class="kw">|</span> <span class="fu">sh</span></span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode powershell"><code class="sourceCode powershell"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">irm</span> https<span class="op">://</span>raw<span class="op">.</span><span class="fu">githubusercontent</span><span class="op">.</span><span class="fu">com</span><span class="op">/</span>KoukeNeko<span class="op">/</span>taiga-cli<span class="op">/</span>main<span class="op">/</span>scripts<span class="op">/</span>install<span class="op">.</span><span class="fu">ps1</span> <span class="op">|</span> <span class="fu">iex</span></span></code></pre></div>
+<p>Release archives, manual checksum verification, and building from
+source are covered in <a href="INSTALL.md">INSTALL.md</a>. On Windows,
+open a new terminal afterwards to pick up the PATH change.</p></li>
+<li><p><strong>Log in.</strong> Run it with nothing else and answer two
+questions: the URL of any page inside your Taiga, with the hosted Taiga
+offered as the default, and how your account signs in. On macOS and
+Windows the token goes to the OS keyring:</p>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">taiga</span> auth login</span></code></pre></div>
+<p>On Linux the token goes to
+<code>~/.config/taiga-cli/credentials.json</code>, readable only by your
+user, and the login says so. A Linux keyring is often locked with no
+desktop to unlock it on, as over SSH, so it is used only when you ask
+for it with <code>--credential-store=keyring</code>.
+<code>taiga auth status</code> always says where the credential is
+kept.</p>
+<p><code>--credential-store</code> (or
+<code>TAIGA_CREDENTIAL_STORE</code>) chooses this instead of leaving it
+to <code>auto</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Value</th>
+<th>Behaviour</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>auto</code></td>
+<td>The file on Linux; elsewhere the OS keyring, or the file only where
+there is provably no keyring service (default)</td>
+</tr>
+<tr>
+<td><code>keyring</code></td>
+<td>The OS keyring only; fail rather than write a file</td>
+</tr>
+<tr>
+<td><code>file</code></td>
+<td>The file only; never contact a keyring. Suits servers</td>
+</tr>
+<tr>
+<td><code>none</code></td>
+<td>Keep nothing; pass the token in <code>TAIGA_TOKEN</code></td>
+</tr>
+</tbody>
+</table>
+<p>The file is not encrypted. It is protected by file permissions alone,
+and backups or snapshots of the home directory include it.</p>
+<p>To skip the first question, pass <code>--url</code> with the URL of
+any page inside the Taiga web app, such as a project or backlog page;
+the API's address works too, and nothing beyond the site you typed is
+contacted. The hosted Taiga is <code>https://tree.taiga.io/</code>; the
+forum at <code>community.taiga.io</code> is a different site with its
+own accounts, and pasting its address offers the hosted app instead.</p>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">taiga</span> auth login <span class="at">--url</span> https://taiga.example.com/taiga/ <span class="at">--profile</span> company</span></code></pre></div>
+<p>An account that signs in through GitHub or Google has no Taiga
+password. Choose that option at the second question, or pass
+<code>--with-token</code>, and taiga takes the tokens the web app holds:
+sign in on the web, open the browser's JavaScript console on that page,
+and run this to put them on the clipboard:</p>
+<div class="sourceCode" id="cb12"><pre
+class="sourceCode js"><code class="sourceCode javascript"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">copy</span>(<span class="bu">JSON</span><span class="op">.</span><span class="fu">stringify</span>({<span class="dt">auth_token</span><span class="op">:</span> <span class="bu">JSON</span><span class="op">.</span><span class="fu">parse</span>(localStorage<span class="op">.</span><span class="at">token</span>)<span class="op">,</span> <span class="dt">refresh</span><span class="op">:</span> <span class="bu">JSON</span><span class="op">.</span><span class="fu">parse</span>(localStorage<span class="op">.</span><span class="at">refresh</span>)}))</span></code></pre></div>
+<p>Then paste the result at the prompt, or pipe it in:</p>
+<div class="sourceCode" id="cb13"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pbpaste</span> <span class="kw">|</span> <span class="ex">taiga</span> auth login <span class="at">--url</span> https://tree.taiga.io/ <span class="at">--with-token</span></span></code></pre></div>
+<p>The refresh token in that object lets the login renew itself the way
+a password login does. A bare token works too, but then the login lasts
+only until that token expires, which is 24 hours on a default Taiga
+6.</p>
+<p>A token imported this way comes without a refresh token, so it stops
+working when the server's access token expires, which is 24 hours on a
+default Taiga 6. <code>TAIGA_TOKEN</code> is the same thing for a
+script.</p></li>
+<li><p><strong>Pick a project:</strong></p>
+<div class="sourceCode" id="cb14"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="ex">taiga</span> project list</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="ex">taiga</span> project use example-project</span></code></pre></div></li>
+<li><p><strong>Start working:</strong></p>
+<div class="sourceCode" id="cb15"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="ex">taiga</span> issue list</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="ex">taiga</span> issue create <span class="at">--subject</span> <span class="st">&quot;Fix token refresh&quot;</span> <span class="at">--type</span> Bug</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="ex">taiga</span> issue assign 42 <span class="at">--to</span> alice</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="ex">taiga</span> issue close 42 <span class="at">--status</span> Closed</span></code></pre></div></li>
+<li><p><strong>Wire up automation:</strong></p>
+<div class="sourceCode" id="cb16"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="ex">taiga</span> issue view 42 <span class="at">--json</span> <span class="at">--fields</span> id,ref,subject,status,version <span class="at">--no-input</span></span></code></pre></div></li>
+</ol>
+<p>The full command reference, flag documentation, and per-subsystem
+behaviour live in the <a
+href="https://github.com/KoukeNeko/taiga-cli/wiki">handbook wiki</a>,
+which includes <a
+href="https://github.com/KoukeNeko/taiga-cli/wiki/Automation-Recipes">worked
+automation recipes</a> for CI, shell scripts and agents.</p>
+<h2 id="compatibility">Compatibility</h2>
+<ul>
+<li>Taiga 6.10.2, verified by Docker E2E against a pinned image
+digest</li>
+<li>macOS, Linux, and Windows on <code>amd64</code> and
+<code>arm64</code>, built as pure Go (<code>CGO_ENABLED=0</code>)</li>
+<li>Password login, existing bearer tokens, and refresh-token
+rotation</li>
+</ul>
+<p>The detailed matrix and known limits are in <a
+href="COMPATIBILITY.md">COMPATIBILITY.md</a>.</p>
+<hr />
+<h2 id="technical-reference">Technical reference</h2>
+<h3 id="setting-resolution">Setting resolution</h3>
+<p>General settings live in the operating system's user config
+directory. Tokens are never written there:</p>
+<div class="sourceCode" id="cb17"><pre
+class="sourceCode toml"><code class="sourceCode toml"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="dt">current_profile</span> <span class="op">=</span> <span class="st">&quot;company&quot;</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="kw">[profiles.company]</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="dt">api_url</span> <span class="op">=</span> <span class="st">&quot;https://taiga.example.com/taiga/api/v1/&quot;</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="dt">project</span> <span class="op">=</span> <span class="st">&quot;example-project&quot;</span></span></code></pre></div>
+<p>Resolution order, highest first:</p>
+<pre class="text"><code>command flag
+→ TAIGA_PROFILE / TAIGA_API_URL / TAIGA_PROJECT / TAIGA_TOKEN / TAIGA_CREDENTIAL_STORE
+→ Git-local taiga.profile / taiga.project
+→ current profile
+→ safe defaults</code></pre>
+<h3 id="json-contract">JSON contract</h3>
+<p>Successful data goes to stdout and errors go to stderr, never mixed
+into one stream. Single records use <code>data</code>, lists use
+<code>items</code> and <code>page</code>, and both carry
+<code>meta.contract</code>:</p>
+<div class="sourceCode" id="cb19"><pre
+class="sourceCode json"><code class="sourceCode json"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;data&quot;</span><span class="fu">:</span> <span class="fu">{</span> <span class="dt">&quot;id&quot;</span><span class="fu">:</span> <span class="dv">123</span><span class="fu">,</span> <span class="dt">&quot;ref&quot;</span><span class="fu">:</span> <span class="dv">42</span><span class="fu">,</span> <span class="dt">&quot;subject&quot;</span><span class="fu">:</span> <span class="st">&quot;Fix token refresh&quot;</span><span class="fu">,</span> <span class="dt">&quot;version&quot;</span><span class="fu">:</span> <span class="dv">7</span> <span class="fu">},</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;meta&quot;</span><span class="fu">:</span> <span class="fu">{</span> <span class="dt">&quot;contract&quot;</span><span class="fu">:</span> <span class="dv">1</span> <span class="fu">}</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<p>Within one contract version only optional fields are added. Removing
+a field, renaming it, or changing the type of an existing one requires a
+version bump and migration notes in the release.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: right;">Exit code</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">0</td>
+<td>success</td>
+</tr>
+<tr>
+<td style="text-align: right;">1</td>
+<td>unexpected internal failure</td>
+</tr>
+<tr>
+<td style="text-align: right;">2</td>
+<td>usage / schema</td>
+</tr>
+<tr>
+<td style="text-align: right;">3</td>
+<td>authentication</td>
+</tr>
+<tr>
+<td style="text-align: right;">4</td>
+<td>forbidden</td>
+</tr>
+<tr>
+<td style="text-align: right;">5</td>
+<td>not found</td>
+</tr>
+<tr>
+<td style="text-align: right;">6</td>
+<td>OCC conflict</td>
+</tr>
+<tr>
+<td style="text-align: right;">7</td>
+<td>validation / ambiguity</td>
+</tr>
+<tr>
+<td style="text-align: right;">8</td>
+<td>throttled</td>
+</tr>
+<tr>
+<td style="text-align: right;">9</td>
+<td>transport / upstream</td>
+</tr>
+<tr>
+<td style="text-align: right;">10</td>
+<td>confirmation required</td>
+</tr>
+<tr>
+<td style="text-align: right;">11</td>
+<td>ambiguous commit</td>
+</tr>
+<tr>
+<td style="text-align: right;">130</td>
+<td>interrupted before finishing</td>
+</tr>
+</tbody>
+</table>
+<p><code>1</code> means the CLI hit something it has no classification
+for, and is worth reporting as a bug. <code>130</code> follows the shell
+convention of 128 plus the signal number rather than taking a place in
+the table above, because stopping a command is a decision rather than a
+way it failed; an interrupt that stopped a write in flight reports
+<code>11</code> instead.</p>
+<h3 id="security-principles">Security principles</h3>
+<ul>
+<li>Passwords are never accepted on the command line</li>
+<li>Authorization headers, passwords, and tokens never appear in verbose
+logs</li>
+<li>Only GETs are retried automatically, with a bounded count; POST and
+PATCH are never resent blindly</li>
+<li>A write whose outcome is unknown reports
+<code>ambiguous_commit</code> instead of retrying</li>
+<li>OCC conflicts are never auto-merged or overwritten</li>
+<li>Attachment downloads never send the API bearer token to the media
+URL</li>
+<li>TLS verification is always on</li>
+</ul>
+<h3 id="development-and-testing">Development and testing</h3>
+<p>The fast loop, no Docker required:</p>
+<div class="sourceCode" id="cb20"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span> test</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span> test-race</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span> lint</span></code></pre></div>
+<p>Integration tests against a real Taiga server:</p>
+<div class="sourceCode" id="cb21"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span> test-integration</span></code></pre></div>
+<p>The harness uses a dedicated <code>taiga-cli-e2e</code> Compose
+project on <code>localhost:19000</code>, creates its own throwaway
+account, project, and issues, and tears down only its own containers and
+volumes — it never touches a Taiga instance you use day to day.</p>
+<p>Rebuilding cross-platform release artifacts:</p>
+<div class="sourceCode" id="cb22"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span> release <span class="dt">\</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  VERSION=v0.1.0 <span class="dt">\</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  COMMIT=<span class="st">&quot;</span><span class="va">$(</span><span class="fu">git</span> rev-parse HEAD<span class="va">)</span><span class="st">&quot;</span> <span class="dt">\</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>  SOURCE_DATE_EPOCH=<span class="st">&quot;</span><span class="va">$(</span><span class="fu">git</span> show <span class="at">-s</span> <span class="at">--format</span><span class="op">=</span>%ct HEAD<span class="va">)</span><span class="st">&quot;</span></span></code></pre></div>
+<p>The same source, Go toolchain, version, commit, and epoch produce
+byte-identical Linux and Windows archives. The maintainer release
+process is in <a href="RELEASING.md">RELEASING.md</a>. macOS archives
+are the exception: notarization requires a secure timestamp from Apple,
+so a Developer ID signature can never reproduce. Their contents are
+otherwise built identically.</p>
+<p>
+  <img alt="Cobra" src="https://img.shields.io/badge/COBRA-CLI-00ADD8?style=for-the-badge&logo=go&logoColor=white">
+  <img alt="Reproducible builds" src="https://img.shields.io/badge/BUILDS-REPRODUCIBLE-4CAF50?style=for-the-badge">
+  <img alt="SPDX 2.3 SBOM" src="https://img.shields.io/badge/SBOM-SPDX_2.3-2196F3?style=for-the-badge">
+  <img alt="Codacy code quality" src="https://img.shields.io/codacy/grade/b8f361063a874af3be58396ac7c7ad27?branch=main&style=for-the-badge&logo=codacy&label=CODE%20QUALITY">
+</p>
+
+<h2 id="support">Support</h2>
+<p>If Taiga CLI is useful to you, you can support development:</p>
+<p><a href="https://buymeacoffee.com/doershing"><img alt="Buy Me a Coffee" src="https://img.shields.io/badge/Buy%20Me%20a%20Coffee-doershing-FFDD00?style=for-the-badge&logo=buymeacoffee&logoColor=black"></a></p>
+<h2 id="trademarks">Trademarks</h2>
+<p>Taiga is a trademark of its respective owner. This project is an
+independent client that is not affiliated with, endorsed by, or
+sponsored by the Taiga project or its maintainers, and uses the name
+only to describe the software it works with. The Taiga team <a
+href="https://community.taiga.io/t/aihki-a-cli-client-for-taiga-plus-a-naming-question/8947">confirmed
+on the community forum</a> that a small, independent third-party client
+describing itself with the Taiga name is not a problem.</p>
+<h2 id="license">License</h2>
+<p><a href="LICENSE">MIT</a> © KoukeNeko</p>
+</body>
+</html>

@@ -1,36 +1,30 @@
-<p align="center">
-  <img src="assets/hero.png" alt="Taiga CLI — an independent command-line client for Taiga" width="100%">
-</p>
+# Taiga CLI
 
-<h1 align="center">Taiga CLI</h1>
+![Taiga CLI — an independent command-line client for Taiga](assets/hero.png)
 
-<p align="center">
-  <strong>An independent command-line client for Taiga.</strong><br>
-  Readable terminal output for people, and a stable JSON contract for shells, CI, and agents.
-</p>
+**An independent command-line client for Taiga.**\
+Readable terminal output for people, and a stable JSON contract for shells, CI,
+and agents.
 
-<p align="center">
-  <a href="https://github.com/KoukeNeko/taiga-cli/releases/latest"><img alt="Latest release" src="https://img.shields.io/github/v/release/KoukeNeko/taiga-cli?style=for-the-badge&logo=github&label=RELEASE&color=2196F3"></a>
-  <a href="https://github.com/KoukeNeko/taiga-cli/releases"><img alt="Release downloads" src="https://img.shields.io/github/downloads/KoukeNeko/taiga-cli/total?style=for-the-badge&logo=github&label=DOWNLOADS&color=4CAF50"></a>
-  <a href="https://github.com/KoukeNeko/taiga-cli/actions/workflows/ci.yml"><img alt="CI status" src="https://img.shields.io/github/actions/workflow/status/KoukeNeko/taiga-cli/ci.yml?branch=main&style=for-the-badge&logo=githubactions&logoColor=white&label=CI"></a>
-  <a href="COMPATIBILITY.md"><img alt="Verified against Taiga 6.10.2" src="https://img.shields.io/badge/TAIGA-6.10.2_VERIFIED-00A5A5?style=for-the-badge"></a>
-  <a href="LICENSE"><img alt="MIT licence" src="https://img.shields.io/badge/LICENSE-MIT-4CAF50?style=for-the-badge&logo=github"></a>
-</p>
+[![Latest
+release](https://img.shields.io/github/v/release/KoukeNeko/taiga-cli?style=for-the-badge&logo=github&label=RELEASE&color=2196F3)](https://github.com/KoukeNeko/taiga-cli/releases/latest)
+[![Release
+downloads](https://img.shields.io/github/downloads/KoukeNeko/taiga-cli/total?style=for-the-badge&logo=github&label=DOWNLOADS&color=4CAF50)](https://github.com/KoukeNeko/taiga-cli/releases)
+[![CI
+status](https://img.shields.io/github/actions/workflow/status/KoukeNeko/taiga-cli/ci.yml?branch=main&style=for-the-badge&logo=githubactions&logoColor=white&label=CI)](https://github.com/KoukeNeko/taiga-cli/actions/workflows/ci.yml)
+[![Verified against Taiga
+6.10.2](https://img.shields.io/badge/TAIGA-6.10.2_VERIFIED-00A5A5?style=for-the-badge)](COMPATIBILITY.md)
+[![MIT
+licence](https://img.shields.io/badge/LICENSE-MIT-4CAF50?style=for-the-badge&logo=github)](LICENSE)
 
-<p align="center">
-  <strong>English</strong> · <a href="README.zh-TW.md">繁體中文</a>
-</p>
+**English** · [繁體中文](README.zh-TW.md)
 
-<p align="center">
-  <a href="INSTALL.md">Install</a>
-  · <a href="#getting-started">Getting started</a>
-  · <a href="https://github.com/KoukeNeko/taiga-cli/wiki">Handbook</a>
-  · <a href="CHANGELOG.md">Changelog</a>
-  · <a href="COMPATIBILITY.md">Compatibility</a>
-  · <a href="PRIVACY.md">Privacy</a>
-</p>
+[Install](INSTALL.md) · [Getting started](#getting-started) ·
+[Handbook](https://github.com/KoukeNeko/taiga-cli/wiki) ·
+[Changelog](CHANGELOG.md) · [Compatibility](COMPATIBILITY.md) ·
+[Privacy](PRIVACY.md)
 
-```sh
+``` sh
 taiga issue list
 taiga issue create --subject "Fix token refresh" --type Bug
 taiga issue close 42 --status Closed
@@ -39,39 +33,45 @@ taiga issue close 42 --status Closed
 taiga issue view 42 --json --fields ref,subject,status,version
 ```
 
-```json
+``` json
 {"data":{"ref":42,"status":"Closed","subject":"Fix token refresh","version":8},"meta":{"contract":1}}
 ```
 
-An independent command-line client for [Taiga 6](https://taiga.io/), not affiliated with the Taiga
-project. It drives projects, agile workflows, and wikis without leaving the terminal, discovers the
-API from the frontend's `conf.json`, including sites deployed under a `/taiga/` subpath, and hands the
-token to your operating system keyring (on Linux, a file only you can read) instead of writing it
-into a config file.
+An independent command-line client for [Taiga 6](https://taiga.io/), not
+affiliated with the Taiga project. It drives projects, agile workflows, and
+wikis without leaving the terminal, discovers the API from the frontend's
+`conf.json`, including sites deployed under a `/taiga/` subpath, and hands the
+token to your operating system keyring (on Linux, a file only you can read)
+instead of writing it into a config file.
 
-**One command serves both people and programs.** Run it directly and you get aligned tables; add
-`--json` and you get a versioned contract, backed by fixed exit codes and JSON Schema descriptors, so
-a shell script, a CI job, or an LLM agent can drive it safely. The output format never changes just
-because it was piped — if you want JSON, you ask for it.
+**One command serves both people and programs.** Run it directly and you get
+aligned tables; add `--json` and you get a versioned contract, backed by fixed
+exit codes and JSON Schema descriptors, so a shell script, a CI job, or an LLM
+agent can drive it safely. The output format never changes just because it was
+piped — if you want JSON, you ask for it.
 
-**Writes behave predictably.** Work items carry a version, and Taiga checks it per field: a change to
-a field someone else has already changed is refused instead of overwriting them, while their edit to
-a different field merges. Nothing is ever auto-merged on your behalf — a refusal stops the command so
-you can re-read and decide. Only idempotent GETs are retried. If a connection drops mid-write, the
-CLI reports `ambiguous_commit` and asks you to verify rather than blindly resending.
+**Writes behave predictably.** Work items carry a version, and Taiga checks it
+per field: a change to a field someone else has already changed is refused
+instead of overwriting them, while their edit to a different field merges.
+Nothing is ever auto-merged on your behalf — a refusal stops the command so you
+can re-read and decide. Only idempotent GETs are retried. If a connection drops
+mid-write, the CLI reports `ambiguous_commit` and asks you to verify rather than
+blindly resending.
 
 ## What it does
 
 ### The whole Taiga workflow
 
-Day-to-day operations for projects, epics, user stories, tasks, issues, sprints, and wiki pages are
-all here: list, view, create, edit, assign, comment, close, delete. Plus members and role
-permissions, webhooks, custom fields, eight families of workflow metadata, swimlanes, tags, due-date
-presets, and cross-project epic ↔ story links.
+Day-to-day operations for projects, epics, user stories, tasks, issues, sprints,
+and wiki pages are all here: list, view, create, edit, assign, comment, close,
+delete. Plus members and role permissions, webhooks, custom fields, eight
+families of workflow metadata, swimlanes, tags, due-date presets, and
+cross-project epic ↔︎ story links.
 
-Work items accept a bare ref, a `project#ref` pair, or a pasted Taiga URL — all three work:
+Work items accept a bare ref, a `project#ref` pair, or a pasted Taiga URL — all
+three work:
 
-```text
+``` text
 42
 example-project#42
 https://taiga.example.com/taiga/project/example-project/issue/42
@@ -79,215 +79,237 @@ https://taiga.example.com/taiga/project/example-project/issue/42
 
 ### A stable surface for automation
 
-`--json` emits a `meta.contract` version, `--fields` selects columns, and `taiga schema <command>`
-returns that command's input and output JSON Schema along with `safety` and `idempotency`
-annotations — enough for an agent to decide whether a command may run unattended. Exit codes are
-partitioned by failure kind, and `--dry-run` resolves and displays the mutation it would send while
-guaranteeing that no write request leaves the process.
+`--json` emits a `meta.contract` version, `--fields` selects columns, and
+`taiga schema <command>` returns that command's input and output JSON Schema
+along with `safety` and `idempotency` annotations — enough for an agent to
+decide whether a command may run unattended. Exit codes are partitioned by
+failure kind, and `--dry-run` resolves and displays the mutation it would send
+while guaranteeing that no write request leaves the process.
 
-```text
+``` text
 $ taiga schema issue create
 {"data":{"command":"issue create","safety":"write","idempotency":"non_idempotent",
          "input_schema":{...,"required":["subject"]},"output_schema":{...}},"meta":{"contract":1}}
 ```
 
-An agent reads `safety` and `idempotency` to decide whether a command may run unattended, and the
-schemas to build and validate the call — nothing is scraped from `--help`.
+An agent reads `safety` and `idempotency` to decide whether a command may run
+unattended, and the schemas to build and validate the call — nothing is scraped
+from `--help`.
 
 ### Hard to break things with
 
-Deleting work items and metadata is verified by reading the target back. Attachment and CSV downloads
-stream to a `0600` temporary file, verify their digests, and land atomically without clobbering an
-existing file. Destructive actions require an explicit `--yes` when there is no terminal. Webhook
-secrets, application-token auth codes, and ownership-transfer tokens never appear in any output,
-including dry runs.
+Deleting work items and metadata is verified by reading the target back.
+Attachment and CSV downloads stream to a `0600` temporary file, verify their
+digests, and land atomically without clobbering an existing file. Destructive
+actions require an explicit `--yes` when there is no terminal. Webhook secrets,
+application-token auth codes, and ownership-transfer tokens never appear in any
+output, including dry runs.
 
 ### Safe to automate
 
-A wrapper that misreports what happened to your data is worse than no wrapper, because a script acts
-on the answer. Three things follow from that:
+A wrapper that misreports what happened to your data is worse than no wrapper,
+because a script acts on the answer. Three things follow from that:
 
-- **A refused write is told apart from a bad one by structure, not wording.** Taiga answers both with
-  HTTP 400 under the same key and separates them only by the shape of the value, and it translates
-  the sentence, so matching on the words would misfire and would fail outright on a server running in
-  another language.
-- **A write whose outcome is unknown says so.** Interrupting a request already in flight does not
-  un-send it, so the CLI reports `ambiguous_commit` and asks you to check rather than claiming a
-  failure it cannot prove.
-- **Concurrent writes are exercised, not assumed.** An end-to-end test drives one project from twelve
-  accounts at once and checks that no two accepted writes ever saw the same resulting version.
+- **A refused write is told apart from a bad one by structure, not wording.**
+  Taiga answers both with HTTP 400 under the same key and separates them only by
+  the shape of the value, and it translates the sentence, so matching on the
+  words would misfire and would fail outright on a server running in another
+  language.
+- **A write whose outcome is unknown says so.** Interrupting a request already
+  in flight does not un-send it, so the CLI reports `ambiguous_commit` and asks
+  you to check rather than claiming a failure it cannot prove.
+- **Concurrent writes are exercised, not assumed.** An end-to-end test drives
+  one project from twelve accounts at once and checks that no two accepted
+  writes ever saw the same resulting version.
 
-[Concurrency and conflicts](https://github.com/KoukeNeko/taiga-cli/wiki/Work-Items) covers what Taiga
-refuses and what it merges.
+[Concurrency and
+conflicts](https://github.com/KoukeNeko/taiga-cli/wiki/Work-Items) covers what
+Taiga refuses and what it merges.
 
 ### Many sites, many projects
 
-Profiles switch between Taiga sites, each remembering its own API URL and default project. You can
-also pin a profile and project to a single Git repository, stored in `.git/config` so it is never
-committed:
+Profiles switch between Taiga sites, each remembering its own API URL and
+default project. You can also pin a profile and project to a single Git
+repository, stored in `.git/config` so it is never committed:
 
-```sh
+``` sh
 taiga project use example-project --local
 ```
 
 ### Diagnosable when something breaks
 
-`taiga doctor` checks frontend discovery, the API, authentication, and the default project one by
-one. When you need help, `taiga doctor bundle` produces a report you can share without worrying:
-version information, presence booleans, and status codes only — no URLs, usernames, project names,
-or credentials — created locally and never uploaded.
+`taiga doctor` checks frontend discovery, the API, authentication, and the
+default project one by one. When you need help, `taiga doctor bundle` produces a
+report you can share without worrying: version information, presence booleans,
+and status codes only — no URLs, usernames, project names, or credentials —
+created locally and never uploaded.
 
 ### How it compares
 
-One binary that a person, a shell script, a CI job, and an agent can all share — the lowest common
-interface, without running another service.
+One binary that a person, a shell script, a CI job, and an agent can all share —
+the lowest common interface, without running another service.
 
-|                          | Web UI | Basic CLI | Taiga CLI | MCP server |
-| ------------------------ | :----: | :-------: | :-------: | :--------: |
-| A person at a terminal   |   ✅   |    ✅     |    ✅     |     —      |
-| Shell scripts            |   —    |    ✅     |    ✅     |     —      |
-| CI pipelines             |   —    |    ⚠️     |    ✅     |     ⚠️     |
-| AI agents                |   —    |    ⚠️     |    ✅     |     ✅     |
-| Stable JSON contract     |   —    |    ⚠️     |    ✅     |     ✅     |
-| JSON Schema per command  |   —    |    —      |    ✅     |   varies   |
-| Dry-run                  |   —    |    ⚠️     |    ✅     |   varies   |
-| Conflict-safe writes     |  n/a   |  varies   |    ✅     |   varies   |
-| No extra daemon          |   —    |    ✅     |    ✅     |     —      |
+|                         | Web UI | Basic CLI | Taiga CLI | MCP server |
+| ----------------------- | :----: | :-------: | :-------: | :--------: |
+| A person at a terminal  | ✅     | ✅        | ✅        | —          |
+| Shell scripts           | —      | ✅        | ✅        | —          |
+| CI pipelines            | —      | ⚠️        | ✅        | ⚠️         |
+| AI agents               | —      | ⚠️        | ✅        | ✅         |
+| Stable JSON contract    | —      | ⚠️        | ✅        | ✅         |
+| JSON Schema per command | —      | —         | ✅        | varies     |
+| Dry-run                 | —      | ⚠️        | ✅        | varies     |
+| Conflict-safe writes    | n/a    | varies    | ✅        | varies     |
+| No extra daemon         | —      | ✅        | ✅        | —          |
 
 ## Getting started
 
 1. **Install.** Homebrew, on macOS and Linux:
 
-   ```sh
-   brew install koukeneko/tap/taiga
-   ```
+    ``` sh
+    brew install koukeneko/tap/taiga
+    ```
 
-   [Scoop](https://scoop.sh), on Windows:
+    [Scoop](https://scoop.sh), on Windows:
 
-   ```powershell
-   scoop bucket add koukeneko https://github.com/KoukeNeko/scoop-bucket
-   scoop install koukeneko/taiga-cli
-   ```
+    ``` powershell
+    scoop bucket add koukeneko https://github.com/KoukeNeko/scoop-bucket
+    scoop install koukeneko/taiga-cli
+    ```
 
-   On Debian/Ubuntu or Fedora/RHEL, add the signed APT/DNF repository for auto-updating installs, or
-   grab a `.deb` / `.rpm` directly — see [INSTALL.md](INSTALL.md#linux-packages-deb-and-rpm).
+    On Debian/Ubuntu or Fedora/RHEL, add the signed APT/DNF repository for
+    auto-updating installs, or grab a `.deb` / `.rpm` directly — see
+    [INSTALL.md](INSTALL.md#linux-packages-deb-and-rpm).
 
-   Or the install script, which verifies the download against the release checksums before it
-   installs anything:
+    Or the install script, which verifies the download against the release
+    checksums before it installs anything:
 
-   ```sh
-   curl -fsSL https://raw.githubusercontent.com/KoukeNeko/taiga-cli/main/scripts/install.sh | sh
-   ```
+    ``` sh
+    base=https://raw.githubusercontent.com/KoukeNeko/taiga-cli/main
+    curl -fsSL "$base/scripts/install.sh" | sh
+    ```
 
-   ```powershell
-   irm https://raw.githubusercontent.com/KoukeNeko/taiga-cli/main/scripts/install.ps1 | iex
-   ```
+    ``` powershell
+    $base = "https://raw.githubusercontent.com/KoukeNeko/taiga-cli/main"
+    irm "$base/scripts/install.ps1" | iex
+    ```
 
-   Release archives, manual checksum verification, and building from source are covered in
-   [INSTALL.md](INSTALL.md). On Windows, open a new terminal afterwards to pick up the PATH change.
+    Release archives, manual checksum verification, and building from source are
+    covered in [INSTALL.md](INSTALL.md). On Windows, open a new terminal
+    afterwards to pick up the PATH change.
 
-2. **Log in.** Run it with nothing else and answer two questions: the URL of any page inside your
-   Taiga, with the hosted Taiga offered as the default, and how your account signs in. On macOS and
-   Windows the token goes to the OS keyring:
+2. **Log in.** Run it with nothing else and answer two questions: the URL of
+    any page inside your Taiga, with the hosted Taiga offered as the default,
+    and how your account signs in. On macOS and Windows the token goes to the OS
+    keyring:
 
-   ```sh
-   taiga auth login
-   ```
+    ``` sh
+    taiga auth login
+    ```
 
-   On Linux the token goes to `~/.config/taiga-cli/credentials.json`, readable only by your user, and
-   the login says so. A Linux keyring is often locked with no desktop to unlock it on, as over SSH, so
-   it is used only when you ask for it with `--credential-store=keyring`. `taiga auth status` always
-   says where the credential is kept.
+    On Linux the token goes to `~/.config/taiga-cli/credentials.json`, readable
+    only by your user, and the login says so. A Linux keyring is often locked
+    with no desktop to unlock it on, as over SSH, so it is used only when you
+    ask for it with `--credential-store=keyring`. `taiga auth status` always
+    says where the credential is kept.
 
-   `--credential-store` (or `TAIGA_CREDENTIAL_STORE`) chooses this instead of leaving it to `auto`:
+    `--credential-store` (or `TAIGA_CREDENTIAL_STORE`) chooses this instead of
+    leaving it to `auto`:
 
-   | Value | Behaviour |
-   | --- | --- |
-   | `auto` | The file on Linux; elsewhere the OS keyring, or the file only where there is provably no keyring service (default) |
-   | `keyring` | The OS keyring only; fail rather than write a file |
-   | `file` | The file only; never contact a keyring. Suits servers |
-   | `none` | Keep nothing; pass the token in `TAIGA_TOKEN` |
+    | Value     | Behaviour                                             |
+    | --------- | ----------------------------------------------------- |
+    | `auto`    | Platform default (see below)                          |
+    | `keyring` | The OS keyring only; fail rather than write a file    |
+    | `file`    | The file only; never contact a keyring. Suits servers |
+    | `none`    | Keep nothing; pass the token in `TAIGA_TOKEN`         |
 
-   The file is not encrypted. It is protected by file permissions alone, and backups or snapshots of
-   the home directory include it.
+    `auto` (the default) uses the file on Linux; elsewhere it uses the OS
+    keyring, or the file only where there is provably no keyring service.
 
-   To skip the first question, pass `--url` with the URL of any page inside the Taiga web app, such
-   as a project or backlog page; the API's address works too, and nothing beyond the site you typed
-   is contacted. The hosted Taiga is `https://tree.taiga.io/`; the forum at `community.taiga.io` is
-   a different site with its own accounts, and pasting its address offers the hosted app instead.
+    The file is not encrypted. It is protected by file permissions alone, and
+    backups or snapshots of the home directory include it.
 
-   ```sh
-   taiga auth login --url https://taiga.example.com/taiga/ --profile company
-   ```
+    To skip the first question, pass `--url` with the URL of any page inside the
+    Taiga web app, such as a project or backlog page; the API's address works
+    too, and nothing beyond the site you typed is contacted. The hosted Taiga is
+    `https://tree.taiga.io/`; the forum at `community.taiga.io` is a different
+    site with its own accounts, and pasting its address offers the hosted app
+    instead.
 
-   An account that signs in through GitHub or Google has no Taiga password. Choose that option at
-   the second question, or pass `--with-token`, and taiga takes the tokens the web app holds: sign
-   in on the web, open the browser's JavaScript console on that page, and run this to put them on
-   the clipboard:
+    ``` sh
+    taiga auth login --url https://taiga.example.com/taiga/ --profile company
+    ```
 
-   ```js
-   copy(JSON.stringify({auth_token: JSON.parse(localStorage.token), refresh: JSON.parse(localStorage.refresh)}))
-   ```
+    An account that signs in through GitHub or Google has no Taiga password.
+    Choose that option at the second question, or pass `--with-token`, and taiga
+    takes the tokens the web app holds: sign in on the web, open the browser's
+    JavaScript console on that page, and run this to put them on the clipboard:
 
-   Then paste the result at the prompt, or pipe it in:
+    ``` js
+    copy(JSON.stringify({auth_token: JSON.parse(localStorage.token), refresh: JSON.parse(localStorage.refresh)}))
+    ```
 
-   ```sh
-   pbpaste | taiga auth login --url https://tree.taiga.io/ --with-token
-   ```
+    Then paste the result at the prompt, or pipe it in:
 
-   The refresh token in that object lets the login renew itself the way a password login does. A
-   bare token works too, but then the login lasts only until that token expires, which is 24 hours
-   on a default Taiga 6.
+    ``` sh
+    pbpaste | taiga auth login --url https://tree.taiga.io/ --with-token
+    ```
 
-   A token imported this way comes without a refresh token, so it stops working when the server's
-   access token expires, which is 24 hours on a default Taiga 6. `TAIGA_TOKEN` is the same thing
-   for a script.
+    The refresh token in that object lets the login renew itself the way a
+    password login does. A bare token works too, but then the login lasts only
+    until that token expires, which is 24 hours on a default Taiga 6.
+
+    A token imported this way comes without a refresh token, so it stops working
+    when the server's access token expires, which is 24 hours on a default
+    Taiga 6. `TAIGA_TOKEN` is the same thing for a script.
 
 3. **Pick a project:**
 
-   ```sh
-   taiga project list
-   taiga project use example-project
-   ```
+    ``` sh
+    taiga project list
+    taiga project use example-project
+    ```
 
 4. **Start working:**
 
-   ```sh
-   taiga issue list
-   taiga issue create --subject "Fix token refresh" --type Bug
-   taiga issue assign 42 --to alice
-   taiga issue close 42 --status Closed
-   ```
+    ``` sh
+    taiga issue list
+    taiga issue create --subject "Fix token refresh" --type Bug
+    taiga issue assign 42 --to alice
+    taiga issue close 42 --status Closed
+    ```
 
 5. **Wire up automation:**
 
-   ```sh
-   taiga issue view 42 --json --fields id,ref,subject,status,version --no-input
-   ```
+    ``` sh
+    taiga issue view 42 --json --fields id,ref,subject,status,version --no-input
+    ```
 
-The full command reference, flag documentation, and per-subsystem behaviour live in the
-[handbook wiki](https://github.com/KoukeNeko/taiga-cli/wiki), which includes
-[worked automation recipes](https://github.com/KoukeNeko/taiga-cli/wiki/Automation-Recipes) for CI, shell
-scripts and agents.
+The full command reference, flag documentation, and per-subsystem behaviour live
+in the [handbook wiki](https://github.com/KoukeNeko/taiga-cli/wiki), which
+includes [worked automation
+recipes](https://github.com/KoukeNeko/taiga-cli/wiki/Automation-Recipes) for CI,
+shell scripts and agents.
 
 ## Compatibility
 
 - Taiga 6.10.2, verified by Docker E2E against a pinned image digest
-- macOS, Linux, and Windows on `amd64` and `arm64`, built as pure Go (`CGO_ENABLED=0`)
+- macOS, Linux, and Windows on `amd64` and `arm64`, built as pure Go
+  (`CGO_ENABLED=0`)
 - Password login, existing bearer tokens, and refresh-token rotation
 
-The detailed matrix and known limits are in [COMPATIBILITY.md](COMPATIBILITY.md).
+The detailed matrix and known limits are in
+[COMPATIBILITY.md](COMPATIBILITY.md).
 
----
+--------------------------------------------------------------------------------
 
 ## Technical reference
 
 ### Setting resolution
 
-General settings live in the operating system's user config directory. Tokens are never written
-there:
+General settings live in the operating system's user config directory. Tokens
+are never written there:
 
-```toml
+``` toml
 current_profile = "company"
 
 [profiles.company]
@@ -297,7 +319,7 @@ project = "example-project"
 
 Resolution order, highest first:
 
-```text
+``` text
 command flag
 → TAIGA_PROFILE / TAIGA_API_URL / TAIGA_PROJECT / TAIGA_TOKEN / TAIGA_CREDENTIAL_STORE
 → Git-local taiga.profile / taiga.project
@@ -307,46 +329,51 @@ command flag
 
 ### JSON contract
 
-Successful data goes to stdout and errors go to stderr, never mixed into one stream. Single records
-use `data`, lists use `items` and `page`, and both carry `meta.contract`:
+Successful data goes to stdout and errors go to stderr, never mixed into one
+stream. Single records use `data`, lists use `items` and `page`, and both carry
+`meta.contract`:
 
-```json
+``` json
 {
   "data": { "id": 123, "ref": 42, "subject": "Fix token refresh", "version": 7 },
   "meta": { "contract": 1 }
 }
 ```
 
-Within one contract version only optional fields are added. Removing a field, renaming it, or
-changing the type of an existing one requires a version bump and migration notes in the release.
+Within one contract version only optional fields are added. Removing a field,
+renaming it, or changing the type of an existing one requires a version bump and
+migration notes in the release.
 
-| Exit code | Meaning |
-| ---: | --- |
-| 0 | success |
-| 1 | unexpected internal failure |
-| 2 | usage / schema |
-| 3 | authentication |
-| 4 | forbidden |
-| 5 | not found |
-| 6 | OCC conflict |
-| 7 | validation / ambiguity |
-| 8 | throttled |
-| 9 | transport / upstream |
-| 10 | confirmation required |
-| 11 | ambiguous commit |
-| 130 | interrupted before finishing |
+| Exit code | Meaning                      |
+| --------: | ---------------------------- |
+| 0         | success                      |
+| 1         | unexpected internal failure  |
+| 2         | usage / schema               |
+| 3         | authentication               |
+| 4         | forbidden                    |
+| 5         | not found                    |
+| 6         | OCC conflict                 |
+| 7         | validation / ambiguity       |
+| 8         | throttled                    |
+| 9         | transport / upstream         |
+| 10        | confirmation required        |
+| 11        | ambiguous commit             |
+| 130       | interrupted before finishing |
 
-`1` means the CLI hit something it has no classification for, and is worth reporting as a bug. `130`
-follows the shell convention of 128 plus the signal number rather than taking a place in the table
-above, because stopping a command is a decision rather than a way it failed; an interrupt that
-stopped a write in flight reports `11` instead.
+`1` means the CLI hit something it has no classification for, and is worth
+reporting as a bug. `130` follows the shell convention of 128 plus the signal
+number rather than taking a place in the table above, because stopping a command
+is a decision rather than a way it failed; an interrupt that stopped a write in
+flight reports `11` instead.
 
 ### Security principles
 
 - Passwords are never accepted on the command line
 - Authorization headers, passwords, and tokens never appear in verbose logs
-- Only GETs are retried automatically, with a bounded count; POST and PATCH are never resent blindly
-- A write whose outcome is unknown reports `ambiguous_commit` instead of retrying
+- Only GETs are retried automatically, with a bounded count; POST and PATCH are
+  never resent blindly
+- A write whose outcome is unknown reports `ambiguous_commit` instead of
+  retrying
 - OCC conflicts are never auto-merged or overwritten
 - Attachment downloads never send the API bearer token to the media URL
 - TLS verification is always on
@@ -355,7 +382,7 @@ stopped a write in flight reports `11` instead.
 
 The fast loop, no Docker required:
 
-```sh
+``` sh
 make test
 make test-race
 make lint
@@ -363,47 +390,54 @@ make lint
 
 Integration tests against a real Taiga server:
 
-```sh
+``` sh
 make test-integration
 ```
 
-The harness uses a dedicated `taiga-cli-e2e` Compose project on `localhost:19000`, creates its own
-throwaway account, project, and issues, and tears down only its own containers and volumes — it never
-touches a Taiga instance you use day to day.
+The harness uses a dedicated `taiga-cli-e2e` Compose project on
+`localhost:19000`, creates its own throwaway account, project, and issues, and
+tears down only its own containers and volumes — it never touches a Taiga
+instance you use day to day.
 
 Rebuilding cross-platform release artifacts:
 
-```sh
+``` sh
 make release \
   VERSION=v0.1.0 \
   COMMIT="$(git rev-parse HEAD)" \
   SOURCE_DATE_EPOCH="$(git show -s --format=%ct HEAD)"
 ```
 
-The same source, Go toolchain, version, commit, and epoch produce byte-identical Linux and Windows
-archives. The maintainer release process is in [RELEASING.md](RELEASING.md). macOS archives are the exception: notarization requires a secure timestamp from Apple, so a
-Developer ID signature can never reproduce. Their contents are otherwise built identically.
+The same source, Go toolchain, version, commit, and epoch produce byte-identical
+Linux and Windows archives. The maintainer release process is in
+[RELEASING.md](RELEASING.md). macOS archives are the exception: notarization
+requires a secure timestamp from Apple, so a Developer ID signature can never
+reproduce. Their contents are otherwise built identically.
 
-<p>
-  <img alt="Cobra" src="https://img.shields.io/badge/COBRA-CLI-00ADD8?style=for-the-badge&logo=go&logoColor=white">
-  <img alt="Reproducible builds" src="https://img.shields.io/badge/BUILDS-REPRODUCIBLE-4CAF50?style=for-the-badge">
-  <img alt="SPDX 2.3 SBOM" src="https://img.shields.io/badge/SBOM-SPDX_2.3-2196F3?style=for-the-badge">
-  <img alt="Codacy code quality" src="https://img.shields.io/codacy/grade/b8f361063a874af3be58396ac7c7ad27?branch=main&style=for-the-badge&logo=codacy&label=CODE%20QUALITY">
-</p>
+![Cobra](https://img.shields.io/badge/COBRA-CLI-00ADD8?style=for-the-badge&logo=go&logoColor=white)
+![Reproducible
+builds](https://img.shields.io/badge/BUILDS-REPRODUCIBLE-4CAF50?style=for-the-badge)
+![SPDX 2.3
+SBOM](https://img.shields.io/badge/SBOM-SPDX_2.3-2196F3?style=for-the-badge)
+![Codacy code
+quality](https://img.shields.io/codacy/grade/b8f361063a874af3be58396ac7c7ad27?branch=main&style=for-the-badge&logo=codacy&label=CODE%20QUALITY)
 
 ## Support
 
 If Taiga CLI is useful to you, you can support development:
 
-<a href="https://buymeacoffee.com/doershing"><img alt="Buy Me a Coffee" src="https://img.shields.io/badge/Buy%20Me%20a%20Coffee-doershing-FFDD00?style=for-the-badge&logo=buymeacoffee&logoColor=black"></a>
+[![Buy Me a
+Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-doershing-FFDD00?style=for-the-badge&logo=buymeacoffee&logoColor=black)](https://buymeacoffee.com/doershing)
 
 ## Trademarks
 
-Taiga is a trademark of its respective owner. This project is an independent client that is not
-affiliated with, endorsed by, or sponsored by the Taiga project or its maintainers, and uses the name
-only to describe the software it works with. The Taiga team
-[confirmed on the community forum](https://community.taiga.io/t/aihki-a-cli-client-for-taiga-plus-a-naming-question/8947)
-that a small, independent third-party client describing itself with the Taiga name is not a problem.
+Taiga is a trademark of its respective owner. This project is an independent
+client that is not affiliated with, endorsed by, or sponsored by the Taiga
+project or its maintainers, and uses the name only to describe the software it
+works with. The Taiga team [confirmed on the community
+forum](https://community.taiga.io/t/aihki-a-cli-client-for-taiga-plus-a-naming-question/8947)
+that a small, independent third-party client describing itself with the Taiga
+name is not a problem.
 
 ## License
 
